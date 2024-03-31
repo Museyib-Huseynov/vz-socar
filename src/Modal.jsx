@@ -3,13 +3,17 @@ import data from './data';
 import { FaTimes } from 'react-icons/fa';
 
 const Modal = ({ isModalOpen, activeWell, closeModal }) => {
-  const { well, difficulty, expectedProduction } = data.find(
-    (item) => item.well === activeWell
-  );
+  let well, difficulty, expectedProduction;
+  if (activeWell) {
+    ({ well, difficulty, expectedProduction } = data.find(
+      (item) => item.well === activeWell
+    ));
+  }
+
   return (
     <Wrapper $isModalOpen={isModalOpen}>
       <div className='model-container'>
-        <h2>{`Well ${well}`}</h2>
+        <h2>{`Well ${well || ''}`}</h2>
         <p>{`Difficulty level: ${difficulty}`}</p>
         <p>{`Expected production: ${expectedProduction}`}</p>
         <p>Well needs to be perforated to upper horizon.</p>
@@ -33,7 +37,7 @@ const Wrapper = styled.div`
   z-index: ${(props) => (props.$isModalOpen ? 10 : -1)};
   visibility: ${(props) => (props.$isModalOpen ? 'visible' : 'hidden')};
   opacity: ${(props) => (props.$isModalOpen ? 1 : 0)};
-  transition: all 2s linear;
+  transition: all 0.3s linear;
 
   .model-container {
     background: #fff;

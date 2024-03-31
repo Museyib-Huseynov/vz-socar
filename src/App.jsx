@@ -15,7 +15,6 @@ function App() {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setActiveWell(null);
   };
 
   const findMax = (arr) => {
@@ -91,13 +90,11 @@ function App() {
           );
         })}
       </div>
-      {activeWell && (
-        <Modal
-          isModalOpen={isModalOpen}
-          activeWell={activeWell}
-          closeModal={closeModal}
-        />
-      )}
+      <Modal
+        isModalOpen={isModalOpen}
+        activeWell={activeWell}
+        closeModal={closeModal}
+      />
     </StyledContainer>
   );
 }
