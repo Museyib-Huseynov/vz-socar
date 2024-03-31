@@ -10,8 +10,8 @@ function App() {
     pieSize: 60,
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [activeWell, setActiveWell] = useState(356);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [activeWell, setActiveWell] = useState(null);
 
   const closeModal = () => {
     setIsModalOpen(false);
