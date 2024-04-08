@@ -20,8 +20,8 @@ function App() {
   const findMax = (arr) => {
     let max = 0;
     for (let item of arr) {
-      if (item.expectedProduction > max) {
-        max = item.expectedProduction;
+      if (item.potentialOilProduction > max) {
+        max = item.potentialOilProduction;
       }
     }
     return max;
@@ -38,18 +38,30 @@ function App() {
           onChange={(e) => setState({ ...state, field: e.target.value })}
         >
           <option>SWG</option>
-          <option>Bulla</option>
         </select>
         <label htmlFor='platformSelection'>Platform</label>
         <select
           id='platformSelection'
-          selected={state.platform}
-          onChange={(e) => setState({ ...state, platform: e.target.value })}
+          value={state.platform}
+          onChange={(e) => {
+            setActiveWell(null);  
+            setState({ ...state, platform: e.target.value })}}
         >
-          <option>7</option>
-          <option>15</option>
-          <option>11</option>
-          <option>13</option>
+          <option value={1}>1</option>
+          <option value={2}>2</option>
+          <option value={3}>3</option>
+          <option value={4}>4</option>
+          <option value={5}>5</option>
+          <option value={6}>6</option>
+          <option value={7}>7</option>
+          <option value={8}>8</option>
+          <option value={9}>9</option>
+          <option value={10}>10</option>
+          <option value={11}>11</option>
+          <option value={13}>13</option>
+          <option value={14}>14</option>
+          <option value={15}>15</option>
+          <option value={19}>19</option>
         </select>
         <label htmlFor='pieSize'>Pie size</label>
         <input
@@ -61,26 +73,36 @@ function App() {
         />
       </form>
       <div id='platform-container'>
-        {data.map((item, _, arr) => {
+        {data[state.platform].map((item, _, arr) => {
           return (
             <div
               key={item.well}
               className={`platform`}
               style={{
-                left: item.left,
-                top: item.top,
-                background:
-                  item.difficulty === 'easy'
-                    ? 'green'
-                    : item.difficulty === 'medium'
-                    ? 'yellow'
-                    : 'red',
-                width:
-                  (item.expectedProduction * +state.pieSize) / +findMax(arr),
-                height:
-                  (item.expectedProduction * +state.pieSize) / +findMax(arr),
+                gridArea: item.gridArea,
+                background: !item.status
+                  ? 'black'
+                  : item.type !== 'prod' && !item.difficulty
+                  ? 'lightblue'
+                  : item.status && !item.difficulty
+                  ? 'none'
+                  : item.difficulty === 'easy'
+                  ? 'green'
+                  : item.difficulty === 'medium'
+                  ? 'yellow'
+                  : 'red',
+                color: !item.status ? 'white' : 'black',
+                border: !item.difficulty ? '1px solid #000' : 'none',
+                width: !item.potentialOilProduction
+                  ? '60px'
+                  : (item.potentialOilProduction * +state.pieSize) /
+                    +findMax(arr),
+                height: !item.potentialOilProduction
+                  ? '60px'
+                  : (item.potentialOilProduction * +state.pieSize) /
+                    +findMax(arr),
               }}
-              onClick={(e) => {
+              onClick={() => {
                 setIsModalOpen(true);
                 setActiveWell(item.well);
               }}
@@ -94,6 +116,7 @@ function App() {
         isModalOpen={isModalOpen}
         activeWell={activeWell}
         closeModal={closeModal}
+        platform={state.platform}
       />
     </StyledContainer>
   );
@@ -149,32 +172,26 @@ const StyledContainer = styled.main`
     width: 150px;
   }
 
-  /* @keyframes bw {
-    0% {
-      border: 0px solid brown;
-    }
-    100% {
-      border: 5px solid black;
-    }
-  } */
-
   #platform-container {
-    min-width: 1000px;
-    height: 350px;
+    width: 1200px;
+    height: 400px;
+    padding: 10px;
     border-radius: 20px;
     border: 2px solid #000;
     align-self: start;
-    position: relative;
     user-select: none;
-    /* display: grid;
-    grid-template-columns: repeat(12, 1fr); */
+    display: grid;
+    grid-template-columns: repeat(22, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    place-items: center;
+    column-gap: 10px;
+    overflow: hidden;
   }
 
   .platform {
-    border-radius: 50%;
     display: grid;
     place-items: center;
-    position: absolute;
+    border-radius: 50%;
     cursor: pointer;
   }
 `;
